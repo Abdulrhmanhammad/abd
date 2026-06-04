@@ -9,16 +9,14 @@ import 'constants.dart';
 import 'screens/favorites_screen.dart';
 import 'screens/more_screen.dart';
 import 'screens/web_screen.dart';
-import 'services/push_service.dart';
 
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: kPrimary,
     statusBarIconBrightness: Brightness.light,
     statusBarBrightness: Brightness.dark,
   ));
-  await PushService.init(); // إشعارات Push (آمنة حتى قبل إعداد Firebase)
   runApp(const DaleelakApp());
 }
 

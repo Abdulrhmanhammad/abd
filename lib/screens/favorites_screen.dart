@@ -26,10 +26,12 @@ class FavoritesScreenState extends State<FavoritesScreen> {
 
   Future<void> refresh() async {
     final items = await FavoritesService.all();
-    if (mounted) setState(() {
-          _items = items;
-          _loaded = true;
-        });
+    if (mounted) {
+      setState(() {
+        _items = items;
+        _loaded = true;
+      });
+    }
   }
 
   Future<void> _remove(int index) async {

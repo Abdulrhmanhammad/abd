@@ -8,12 +8,11 @@
 |--------|-------|-------|
 | 🏠 الرئيسية (WebView) | `lib/screens/web_screen.dart` | الموقع + شاشة بداية + شاشة عدم اتصال + زر حفظ |
 | ⭐ المفضّلة | `lib/screens/favorites_screen.dart` | شاشة أصلية، حفظ محلي يعمل دون إنترنت |
-| ⚙️ المزيد | `lib/screens/more_screen.dart` | إشعارات، مشاركة، تقييم، تواصل، خصوصية |
-| 🔔 إشعارات Push | `lib/services/push_service.dart` | Firebase Cloud Messaging + إشعار محلي |
+| ⚙️ المزيد | `lib/screens/more_screen.dart` | مشاركة، تقييم، تواصل، خصوصية |
 | 🧭 شريط تنقّل سفلي | `lib/main.dart` | واجهة أصلية تحيط بالـ WebView |
 
-> ملاحظة: الكود يعمل بأمان حتى قبل إعداد Firebase (لن يتعطّل)، لكن الإشعارات
-> لن تعمل فعلياً إلا بعد إكمال الخطوة 4.5 أدناه.
+> ملاحظة: تمّت إزالة الإشعارات (Firebase) بناءً على الطلب — التطبيق يبني ويعمل
+> دون أي إعداد Firebase.
 
 ---
 
@@ -67,25 +66,6 @@ flutter pub run flutter_launcher_icons
 <string>يحتاج تطبيق دليلك إلى الصور لرفعها داخل الخدمات.</string>
 ```
 اسم العرض: غيّر `CFBundleDisplayName` إلى `دليلك`.
-
-## 4.5) إعداد Firebase للإشعارات 🔔 (مهم)
-1. أنشئ مشروعاً على https://console.firebase.google.com
-2. أضف تطبيق **أندرويد** بمعرّف الحزمة (مثل `site.daleelak.app`) ونزّل
-   `google-services.json` وضعه في `android/app/`.
-3. أضف تطبيق **iOS** بنفس Bundle ID ونزّل `GoogleService-Info.plist`
-   وضعه في `ios/Runner/` (عبر Xcode أو Codemagic).
-4. أسهل طريقة لربط كل شيء تلقائياً (يولّد `firebase_options.dart`):
-   ```bash
-   dart pub global activate flutterfire_cli
-   flutterfire configure
-   ```
-5. **أندرويد**: تأكد أن `android/build.gradle` و`android/app/build.gradle` فيهما
-   إضافة `com.google.gms:google-services` (يضيفها flutterfire غالباً).
-6. **iOS**: في Xcode فعّل قابلية **Push Notifications** و**Background Modes →
-   Remote notifications** لتطبيق Runner.
-7. لإرسال إشعار تجريبي: Firebase Console → Messaging → أرسل للموضوع `all`.
-
-> الكود يشترك تلقائياً في الموضوع `all` عند تفعيل المستخدم للإشعارات من تبويب «المزيد».
 
 ## 5) التشغيل والاختبار
 ```bash

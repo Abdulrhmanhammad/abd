@@ -51,16 +51,20 @@ class _WebScreenState extends State<WebScreen> {
   Future<void> _load() async {
     final connected = await _hasNet();
     if (!connected) {
-      if (mounted) setState(() {
-            _offline = true;
-            _loading = false;
-          });
+      if (mounted) {
+        setState(() {
+          _offline = true;
+          _loading = false;
+        });
+      }
       return;
     }
-    if (mounted) setState(() {
-          _offline = false;
-          _loading = true;
-        });
+    if (mounted) {
+      setState(() {
+        _offline = false;
+        _loading = true;
+      });
+    }
     await widget.controller.loadRequest(Uri.parse(kUrl));
   }
 
