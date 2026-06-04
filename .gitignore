@@ -1,0 +1,24 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+pubspec.lock
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# منصّات تُولَّد بأمر flutter create (اتركها تُبنى محلياً أو على Codemagic)
+# احذف السطور التالية إن أردت رفع مجلدات المنصّات مع المشروع
+# /android/
+# /ios/
+
+# ملفات حسّاسة
+*.jks
+*.keystore
+key.properties
+ios/Runner/GoogleService-Info.plist
+android/app/google-services.json
