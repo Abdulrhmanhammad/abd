@@ -76,5 +76,14 @@
 	<string>يحتاج تطبيق دليلك إلى الميكروفون عند استخدام المزايا الصوتية.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>يحتاج تطبيق دليلك إلى الوصول إلى الصور لرفعها داخل الخدمات.</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>whatsapp</string>
+		<string>tel</string>
+		<string>mailto</string>
+		<string>sms</string>
+		<string>https</string>
+		<string>http</string>
+	</array>
 </dict>
 </plist>

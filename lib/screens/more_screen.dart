@@ -6,9 +6,19 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../constants.dart';
 
-/// تبويب «المزيد»: شاشة أصلية فيها مشاركة، تقييم، تواصل، خصوصية.
+/// تبويب «المزيد»: شاشة أصلية فيها تبديل اللغة، مشاركة، تقييم، تواصل، خصوصية.
 class MoreScreen extends StatelessWidget {
-  const MoreScreen({super.key});
+  const MoreScreen({
+    super.key,
+    required this.isArabic,
+    required this.onToggleLanguage,
+  });
+
+  /// اللغة الحالية للواجهة الأصلية (عربي/إنجليزي).
+  final bool isArabic;
+
+  /// يبدّل لغة الواجهة ويزامن لغة الموقع داخل WebView.
+  final VoidCallback onToggleLanguage;
 
   Future<void> _open(String url) async {
     final uri = Uri.parse(url);
@@ -37,6 +47,15 @@ class MoreScreen extends StatelessWidget {
       body: ListView(
         children: [
           const SizedBox(height: 8),
+          ListTile(
+            leading: const Icon(Icons.translate, color: kPrimary),
+            title: const Text('تغيير اللغة'),
+            subtitle: Text(isArabic ? 'العربية' : 'English',
+                style: const TextStyle(color: kTextMuted)),
+            trailing: const Icon(Icons.swap_horiz, color: kTextMuted),
+            onTap: onToggleLanguage,
+          ),
+          const Divider(height: 1),
           ListTile(
             leading: const Icon(Icons.share, color: kPrimary),
             title: const Text('مشاركة التطبيق'),

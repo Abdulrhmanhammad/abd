@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
 // ── ثوابت العلامة التجارية (مطابقة للنسخة القديمة) ──
-const String kUrl = 'https://daleelak.site/daleelak.html';
+const String kUrl = 'https://daleelak.site/daleelak';
+
+// ── روابط التبويبات الثلاثة (تُحمَّل داخل WebView) ──
+const String kHomeUrl = 'https://daleelak.site/daleelak';
+const String kCategoriesUrl = 'https://daleelak.site/categories';
+const String kCitiesUrl = 'https://daleelak.site/cities';
+
+// النطاق الأساسي للموقع (لتمييز الروابط الداخلية عن الخارجية)
+const String kSiteHost = 'daleelak.site';
 const String kStoreIdIOS = '0000000000'; // ← ضع App Store ID بعد النشر
 const String kPackageAndroid = 'site.daleelak.app';
 const String kPrivacyUrl = 'https://daleelak.site/privacy';

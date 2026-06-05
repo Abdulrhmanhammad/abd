@@ -36,6 +36,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/daleelak.jpg
 
 # ── إعداد شاشة الإقلاع الأصلية (تُولَّد بأمر flutter_native_splash) ──
 flutter_native_splash:

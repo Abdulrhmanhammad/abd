@@ -2,18 +2,54 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../constants.dart';
-import '../services/favorites_service.dart';
 import '../widgets/overlays.dart';
 
-/// التبويب الرئيسي: يعرض الموقع داخل WebView مع شاشة بداية وعدم اتصال،
-/// وزر أصلي لإضافة الصفحة الحالية إلى المفضّلة.
+// النطاقات الخارجية التي تُفتح خارج التطبيق (سوشيال ميديا/مراسلة).
+const Set<String> _externalHosts = {
+  'facebook.com',
+  'www.facebook.com',
+  'm.facebook.com',
+  'fb.com',
+  'fb.me',
+  'twitter.com',
+  'www.twitter.com',
+  'x.com',
+  'www.x.com',
+  'instagram.com',
+  'www.instagram.com',
+  'wa.me',
+  'api.whatsapp.com',
+  't.me',
+  'youtube.com',
+  'www.youtube.com',
+  'youtu.be',
+};
+
+// المخططات (schemes) التي تُسلَّم لتطبيقات النظام مباشرة.
+const Set<String> _externalSchemes = {
+  'whatsapp',
+  'tel',
+  'mailto',
+  'sms',
+};
+
+/// تبويب يعرض صفحة من الموقع داخل WebView مع شاشة بداية وعدم اتصال،
+/// سحب للتحديث، وفتح الروابط الخارجية خارج التطبيق.
 class WebScreen extends StatefulWidget {
-  const WebScreen({super.key, required this.controller});
+  const WebScreen({
+    super.key,
+    required this.controller,
+    required this.url,
+  });
 
   final WebViewController controller;
+
+  /// رابط الصفحة التي يحمّلها هذا التبويب.
+  final String url;
 
   @override
   State<WebScreen> createState() => _WebScreenState();
@@ -31,6 +67,7 @@ class _WebScreenState extends State<WebScreen> {
     super.initState();
     widget.controller.setNavigationDelegate(
       NavigationDelegate(
+        onNavigationRequest: _onNavigationRequest,
         onPageStarted: (_) {
           if (mounted) setState(() => _loading = true);
         },
@@ -46,6 +83,34 @@ class _WebScreenState extends State<WebScreen> {
     );
     _watchConnectivity();
     _load();
+  }
+
+  /// يعترض الروابط: الخارجية تُفتح بتطبيق النظام، والداخلية تكمل داخل WebView.
+  FutureOr<NavigationDecision> _onNavigationRequest(NavigationRequest req) {
+    final url = req.url;
+    final uri = Uri.tryParse(url);
+    final scheme = (uri?.scheme ?? '').toLowerCase();
+    final host = (uri?.host ?? '').toLowerCase();
+
+    final isExternal = _externalSchemes.contains(scheme) ||
+        (host.isNotEmpty &&
+            host != kSiteHost &&
+            !host.endsWith('.$kSiteHost') &&
+            _externalHosts.contains(host));
+
+    if (isExternal) {
+      _launchExternal(uri ?? Uri.parse(url));
+      return NavigationDecision.prevent;
+    }
+    return NavigationDecision.navigate;
+  }
+
+  Future<void> _launchExternal(Uri uri) async {
+    try {
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      }
+    } catch (_) {/* تجاهل: لا تطبيق يتعامل مع الرابط */}
   }
 
   Future<void> _load() async {
@@ -65,7 +130,7 @@ class _WebScreenState extends State<WebScreen> {
         _loading = true;
       });
     }
-    await widget.controller.loadRequest(Uri.parse(kUrl));
+    await widget.controller.loadRequest(Uri.parse(widget.url));
   }
 
   Future<bool> _hasNet() async {
@@ -84,27 +149,6 @@ class _WebScreenState extends State<WebScreen> {
     });
   }
 
-  Future<void> _addCurrentToFavorites() async {
-    final url = await widget.controller.currentUrl();
-    if (url == null) return;
-    String title = url;
-    try {
-      final t = await widget.controller
-          .runJavaScriptReturningResult('document.title');
-      title = t.toString().replaceAll('"', '').trim();
-      if (title.isEmpty) title = 'دليلك';
-    } catch (_) {}
-
-    final added = await FavoritesService.add(FavItem(title: title, url: url));
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(added ? 'أُضيفت إلى المفضّلة ⭐' : 'موجودة في المفضّلة'),
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
-
   @override
   void dispose() {
     _netSub?.cancel();
@@ -115,21 +159,14 @@ class _WebScreenState extends State<WebScreen> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        if (!_offline) WebViewWidget(controller: widget.controller),
+        if (!_offline)
+          RefreshIndicator(
+            color: kPrimary,
+            onRefresh: () => widget.controller.reload(),
+            child: WebViewWidget(controller: widget.controller),
+          ),
         if (_offline) OfflineView(onRetry: _load),
         if (_loading && !_offline) const SplashScreen(),
-        if (!_offline && !_loading)
-          Positioned(
-            bottom: 16,
-            left: 16,
-            child: FloatingActionButton.small(
-              heroTag: 'fav',
-              backgroundColor: kPrimary,
-              foregroundColor: Colors.white,
-              onPressed: _addCurrentToFavorites,
-              child: const Icon(Icons.bookmark_add_outlined),
-            ),
-          ),
       ],
     );
   }
