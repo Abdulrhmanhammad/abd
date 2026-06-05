@@ -42,12 +42,14 @@ flutter:
 # ── إعداد شاشة الإقلاع الأصلية (تُولَّد بأمر flutter_native_splash) ──
 flutter_native_splash:
   color: "#ffffff"
+  image: "assets/daleelak.jpg"
   android_12:
     color: "#ffffff"
+    image: "assets/daleelak.jpg"
 
 # ── إعداد أيقونة التطبيق (تُولَّد بأمر flutter_launcher_icons) ──
 flutter_launcher_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/icon.png"
+  image_path: "assets/daleelak.jpg"
