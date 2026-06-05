@@ -1,10 +1,10 @@
 name: daleelak
 description: "دليلك — تطبيق الموبايل (Flutter WebView)"
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.6.0 <4.0.0'   # يتطلب Flutter 3.27 أو أحدث
+  sdk: ">=3.6.0 <4.0.0" # يتطلب Flutter 3.27 أو أحدث
 
 dependencies:
   flutter:
@@ -17,18 +17,18 @@ dependencies:
   webview_flutter_wkwebview: ^3.18.0
 
   # كشف حالة الاتصال بالإنترنت (شاشة عدم الاتصال)
-  connectivity_plus: ^6.1.0
+  connectivity_plus: ^7.1.1
 
   # طلب أذونات الموقع/الكاميرا/الميكروفون للموقع
-  permission_handler: ^11.3.1
+  permission_handler: ^12.0.3
 
   # ── مزايا أصلية (لتجاوز قاعدة آبل 4.2) ──
-  shared_preferences: ^2.3.2         # حفظ المفضّلة محلياً
-  share_plus: ^10.1.1                # مشاركة التطبيق
-  url_launcher: ^6.3.1               # تقييم/اتصال/خصوصية
+  shared_preferences: ^2.3.2 # حفظ المفضّلة محلياً
+  share_plus: ^12.0.2 # مشاركة التطبيق
+  url_launcher: ^6.3.1 # تقييم/اتصال/خصوصية
 
 dev_dependencies:
-  flutter_lints: ^4.0.0
+  flutter_lints: ^6.0.0
 
   # توليد أيقونة التطبيق وشاشة الإقلاع تلقائياً
   flutter_native_splash: ^2.4.1
