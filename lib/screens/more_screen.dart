@@ -59,8 +59,10 @@ class MoreScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.share, color: kPrimary),
             title: const Text('مشاركة التطبيق'),
-            onTap: () => Share.share(
-              'حمّل تطبيق دليلك — كل محل أقرب إلك:\n$kUrl',
+            onTap: () => SharePlus.instance.share(
+              ShareParams(
+                text: 'حمّل تطبيق دليلك — كل محل أقرب إلك:\n$kUrl',
+              ),
             ),
           ),
           ListTile(
